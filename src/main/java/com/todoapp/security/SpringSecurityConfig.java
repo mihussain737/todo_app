@@ -23,30 +23,29 @@ public class SpringSecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public PasswordEncoder getPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 
-        httpSecurity.csrf((csrf)->csrf.disable())
-                .authorizeHttpRequests((authorzie)-> {
-                            authorzie.requestMatchers(HttpMethod.POST, "api/todos/**").hasAnyRole("ADMIN");
-                            authorzie.requestMatchers(HttpMethod.GET,"api/todos/**").hasAnyRole("ADMIN","USER");
-                            authorzie.requestMatchers(HttpMethod.PUT,"api/todos/**").hasRole("ADMIN");
-                            authorzie.requestMatchers(HttpMethod.PATCH,"api/todos/**").permitAll();
-                        }
-                        )
-                        .httpBasic(Customizer.withDefaults());
+        httpSecurity.csrf(csrf->csrf.disable())
+                .authorizeHttpRequests((authorize)->{
+                    authorize.requestMatchers(HttpMethod.POST,"/api/todos/**").hasAnyRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.GET,"/api/todos/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.PUT,"/api/todos/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.PATCH,"api/todos/**").hasAnyRole("ADMIN","USER");
+                }).httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)throws Exception{
+    public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
     }
-
 //    @Bean
 //    public UserDetailsService userDetailsService() {
 //        UserDetails admin = User.withDefaultPasswordEncoder()
