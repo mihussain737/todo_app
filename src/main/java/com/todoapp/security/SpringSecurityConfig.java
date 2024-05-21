@@ -31,18 +31,15 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity
-                .csrf(csrf -> csrf.disable()) // Disable CSRF protection
-                .authorizeHttpRequests((authorize) -> {
-                    authorize.requestMatchers(HttpMethod.GET, "api/todos/**").permitAll(); // Allow GET requests to be accessed by anyone
-                    authorize.requestMatchers(HttpMethod.POST, "api/todos/**").hasAnyRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.PUT, "api/todos/**").hasAnyRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.DELETE, "api/todos/**").hasAnyRole( "ADMIN");
-                    authorize.requestMatchers(HttpMethod.PATCH, "api/todos/**").hasAnyRole("ADMIN","USER");
-                    authorize.anyRequest().authenticated(); // Any other request requires authentication
-                })
-                .httpBasic(Customizer.withDefaults()); // Enable HTTP Basic Authentication
-
+        httpSecurity.csrf((csrf)->csrf.disable())
+                .authorizeHttpRequests((authorzie)-> {
+                            authorzie.requestMatchers(HttpMethod.POST, "api/todos/**").hasAnyRole("ADMIN");
+                            authorzie.requestMatchers(HttpMethod.GET,"api/todos/**").hasAnyRole("ADMIN","USER");
+                            authorzie.requestMatchers(HttpMethod.PUT,"api/todos/**").hasRole("ADMIN");
+                            authorzie.requestMatchers(HttpMethod.PATCH,"api/todos/**").permitAll();
+                        }
+                        )
+                        .httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
     @Bean
