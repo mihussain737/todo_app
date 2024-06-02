@@ -52,20 +52,40 @@ public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler{
 //        );
 //        return ResponseEntity.badRequest().body(errors);
 //    }
+    /**
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,HttpHeaders headers,HttpStatusCode statusCode,WebRequest request){
-        Map<String,String> errors=new HashMap<>();
+    protected  ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode statusCode,WebRequest webRequest
+    ){
+
+        Map<String ,String> errors=new HashMap<>();
         List<ObjectError> errorList=ex.getBindingResult().getAllErrors();
 
-        errorList.forEach((error)->
-        {
+        errorList.forEach((error)->{
             String fieldName=((FieldError)error).getField();
             String message=error.getDefaultMessage();
             errors.put(fieldName,message);
-        });
+                }
+        );
         return ResponseEntity.badRequest().body(errors);
     }
+    */
 
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
+        Map<String,String> errors=new HashMap<>();
+        List<ObjectError> errorList=ex.getBindingResult().getAllErrors();
+
+        errorList.forEach((error)->{
+            String fieldName=((FieldError)error).getField();
+            String fieldMessage=error.getDefaultMessage();
+
+            errors.put(fieldName,fieldMessage);
+        });
+
+        return ResponseEntity.badRequest().body(errors);
+    }
 }
 

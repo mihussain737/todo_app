@@ -51,11 +51,10 @@ public class TodoController {
     //http://localhost:8080/api/todos/all?pageNo=0&pageSize=3&sortBy=id&sortDir=desc
     @GetMapping("/all")
     public ResponseEntity<List<TodoDto>>getAllTodo(
-            @RequestParam(value = "pageNO",defaultValue = "0",required = false) int pageNo,
-            @RequestParam(value="pageSize",defaultValue = "10",required = false) int pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "completed",required = false) String sortBy,
-            @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir
-
+            @RequestParam(value="pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value= "pageSize",defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = "title", required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = "asc", required = false) String sortDir
     ){
         List<TodoDto> allTodos = todoService.getAllTodos(pageNo,pageSize,sortBy,sortDir);
         return ResponseEntity.ok(allTodos);

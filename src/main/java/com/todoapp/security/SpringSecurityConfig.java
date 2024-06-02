@@ -42,6 +42,16 @@ public class SpringSecurityConfig {
         return httpSecurity.build();
     }
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+//        httpSecurity.csrf((csrf)->csrf.disable())
+//                .authorizeHttpRequests((authorize)->{
+//                    authorize.requestMatchers(HttpMethod.POST,"/api/todos/**").hasAnyRole("ADMIN");
+//                    authorize.requestMatchers(HttpMethod.GET,"/api/todos/**").hasRole("USER");
+//                }).httpBasic((Customizer.withDefaults()));
+//        return httpSecurity.build();
+//    }
+
     @Bean
     public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();

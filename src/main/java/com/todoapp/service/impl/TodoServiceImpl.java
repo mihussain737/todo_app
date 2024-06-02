@@ -51,9 +51,18 @@ public class TodoServiceImpl implements TodoService {
     public List<TodoDto> getAllTodos(int pageNo, int pageSize, String sortBy, String sortDir) {
 
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        List<Todo> content = todoRepository.findAll(pageable).getContent();
+        Pageable pageable=PageRequest.of(pageNo,pageSize,sort);
+        Page<Todo> all = todoRepository.findAll(pageable);
+        List<Todo> content = all.getContent();
         return content.stream().map((todo -> modelMapper.map(todo, TodoDto.class))).collect(Collectors.toList());
+
+
+        /**
+         * Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+         *         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+         *         List<Todo> content = todoRepository.findAll(pageable).getContent();
+         *         return content.stream().map((todo -> modelMapper.map(todo, TodoDto.class))).collect(Collectors.toList());
+         */
     }
 
     @Override
